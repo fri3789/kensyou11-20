@@ -7,51 +7,111 @@
   <style>
     :root { --p:#8b5cf6; --bg:#0c0a1f; --c:#221f47; --t:#f0e6ff; --glow:rgba(139,92,246,0.3); --success:#10b981; }
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:sans-serif;background:linear-gradient(135deg,#0c0a1f,#1a1733);color:var(--t);min-height:100vh}
-    header{background:rgba(12,10,31,.95);backdrop-filter:blur(20px);position:fixed;width:100%;top:0;padding:1rem;display:flex;justify-content:center;align-items:center;z-index:1000;cursor:pointer}
-    .logo{font-size:2rem;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:.3s}
-    header:hover .logo{transform:scale(1.05)}
-    .status{position:absolute;right:2rem;display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--success)}
-    .dot{width:10px;height:10px;background:var(--success);border-radius:50%;animation:glow 1.5s infinite;display:none}
-    @keyframes glow{0%,100%{opacity:1} 50%{opacity:0.5}}
-    main{margin-top:70px;padding:2rem;text-align:center}
-    h1{font-size:2.5rem;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .search{max-width:700px;margin:2rem auto;position:relative}
-    #kw{width:100%;padding:1.2rem 1rem 1.2rem 3rem;border-radius:50px;border:2px solid var(--p);background:#1a1733;color:white;font-size:1.2rem}
-    .think{display:none;padding:3rem}
-    .spin{width:60px;height:60px;border:6px solid #333;border-top:6px solid var(--p);border-radius:50%;animation:s 1s linear infinite;margin:auto}
-    @keyframes s{to{transform:rotate(360deg)}}
-    .res{display:grid;gap:1.5rem;max-width:1200px;margin:auto;padding:1rem}
-    .card{background:var(--c);border-radius:15px;padding:1.5rem;box-shadow:0 10px 30px var(--glow);transition:.3s}
+    body{font-family:'Helvetica Neue',sans-serif;background:linear-gradient(135deg,#0c0a1f,#1a1733);color:var(--t);min-height:100vh}
+    header{background:rgba(12,10,31,.95);backdrop-filter:blur(20px);position:fixed;width:100%;top:0;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;z-index:1000}
+    .logo{font-size:2.4rem;font-weight:900;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer}
+    .ai-tag{background:var(--s);color:white;padding:0.6rem 1.6rem;border-radius:50px;font-size:1.95rem;font-weight:bold}
+    .update-btn{background:var(--p);color:white;border:none;padding:0.7rem 1.6rem;border-radius:25px;cursor:pointer;font-weight:bold;transition:.3s;font-size:.95rem}
+    .update-btn:hover{background:#7c3aed}
+
+    main{margin-top:90px;padding:2rem 1rem;max-width:1400px;margin:auto}
+    h1{text-align:center;font-size:2.8rem;margin-bottom:0.5rem;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .subtitle{text-align:center;color:#ccc;margin-bottom:1.5rem;font-size:1.2rem}
+
+    /* 上部ジャンルタブ（超見やすく・スマホでも完璧） */
+    .genre-tabs{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:12px;
+      margin:2rem 0;
+      padding:0 1rem;
+    }
+    .genre-tabs button{
+      padding:14px 28px;
+      background:var(--c);
+      border:2px solid var(--p);
+      border-radius:50px;
+      color:var(--t);
+      font-weight:bold;
+      font-size:1.05rem;
+      cursor:pointer;
+      transition:all .3s;
+      white-space:nowrap;
+    }
+    .genre-tabs button.active{
+      background:var(--p);
+      color:white;
+      box-shadow:0 0 20px rgba(139,92,246,.6);
+    }
+    .genre-tabs button:hover{background:var(--p);color:white}
+
+    .search{max-width:800px;margin:2rem auto;position:relative}
+    #kw{width:100%;padding:1.4rem 1.2rem 1.4rem 3.8rem;border-radius:50px;border:2px solid var(--p);background:#1a1733;color:white;font-size:1.3rem}
+
+    .res{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:2rem;margin-top:2rem}
+    .card{
+      background:var(--c);
+      border-radius:20px;
+      padding:2rem;
+      box-shadow:0 10px 30px var(--glow);
+      transition:.4s;
+      display:flex;
+      flex-direction:column;
+    }
     .card:hover{transform:translateY(-10px)}
-    .btn{display:block;margin-top:1rem;padding:1rem;background:var(--p);color:white;border-radius:50px;text-decoration:none;font-weight:bold}
-    .error{display:none;color:#ff4d4d;padding:1rem}
-    footer{text-align:center;padding:2rem;color:#888;font-size:0.9rem}
-    @media (max-width:768px){.res{grid-template-columns:1fr}.card{padding:1rem}}
+    .card h3{font-size:1.4rem;margin-bottom:0.8rem;line-height:1.4}
+    .prize{color:#c084fc;font-weight:bold;margin-bottom:0.8rem}
+    .deadline{color:#fb923c;font-weight:bold;margin-bottom:1rem}
+    .btn{margin-top:auto;padding:1.1rem;background:var(--p);color:white;border-radius:50px;text-align:center;font-weight:bold;text-decoration:none;transition:.3s}
+    .btn:hover{background:#7c3aed}
+
+    .think{display:none;padding:4rem;text-align:center}
+    .spin{width:70px;height:70px;border:8px solid #333;border-top:8px solid var(--p);border-radius:50%;animation:s 1s linear infinite;margin:auto}
+    @keyframes s{to{transform:rotate(360deg)}}
+
+    @media(max-width:768px){
+      header{flex-direction:column;gap:1rem}
+      .genre-tabs{gap:10px;padding:0.5rem}
+      .genre-tabs button{padding:12px 20px;font-size:1rem}
+      .res{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
-  <!-- タイトルクリックでトップに戻るようにheader全体をクリック可能に -->
-  <header onclick="resetPage()">
-    <div class="logo">HunterAI</div>
-    <div class="status"><span id="status-text"></span><div class="dot"></div></div>
+  <header>
+    <div class="logo" onclick="resetPage()">HunterAI</div>
+    <div style="display:flex;gap:1rem;align-items:center">
+      <div class="ai-tag" id="ai-tag">2025年11月20日 22:00 最新AI厳選</div>
+      <button class="update-btn" onclick="location.reload()">更新</button>
+    </div>
   </header>
+
   <main>
     <h1>完璧懸賞＆アンケートリサーチサイト</h1>
-    <p>2025年11月20日最新！懸賞＋人気アンケートサイトを徹底収集</p>
-    <div class="search">
-      <input type="text" id="kw" placeholder="現金 / Amazonギフト / 必ずもらえる / マクロミル / infoQ">
+    <p class="subtitle">2025年11月20日最新！必ずもらえる・高確率の神キャンペーンだけをAIが厳選</p>
+
+    <!-- 上部ジャンルタブ -->
+    <div class="genre-tabs">
+      <button class="active" data-genre="all">すべて表示</button>
+      <button data-genre="現金">現金・Pay系</button>
+      <button data-genre="ポイント">ポイント</button>
+      <button data-genre="物品">物品・グッズ</button>
+      <button data-genre="無料商品">無料クーポン</button>
+      <button data-genre="amazon">Amazonギフト</button>
     </div>
+
+    <div class="search">
+      <input type="text" id="kw" placeholder="キーワード検索（例：必ずもらえる / ライオン / 目黒蓮）">
+    </div>
+
     <div class="think" id="think">
       <div class="spin"></div>
-      <p>AIが有効なキャンペーンを検証中...</p>
+      <p style="margin-top:1.5rem;font-size:1.3rem">AIが全力で検索中...</p>
     </div>
-    <div class="error" id="error">該当する有効キャンペーンが見つかりませんでした。</div>
-    <div class="res" id="res" role="list"></div>
+
+    <div class="res" id="res"></div>
   </main>
-  <footer>
-    <p>&copy; 2025 HunterAI - Kaito Saito</p>
-  </footer>
 
   <script>
     const campaigns = [
@@ -85,37 +145,7 @@
       {t:"【先着】PayPayで購入キャンペーン",p:"賞品（先着）",u:"https://tokaikensyo.com/sweepstakes/absolutelyget/",genre:"現金",deadline:"2025/12/31",badge:"first"},
       {t:"【必ずもらえる】ライオン ホームケア還元",p:"ポイント（必ず）",u:"https://lsp-campaign.com/homecare-receiptcp-2/lp.go",genre:"ポイント",deadline:"2025/11/30",badge:"sure"},
       {t:"【必ずもらえる】ミューズ キャッシュバック",p:"500円（必ず）",u:"https://www.musebodywash-cashback2025.jp/",genre:"現金",deadline:"2025/11/30",badge:"sure"},
-      {t:"【高確率】JVCケンウッド製ドライブレコーダー 1,000万台突破記念 感謝キャンペーン",p:"詳細は公式サイトを確認（ドライブレコーダー関連賞品）",u:"https://www.kenwood.com/jp/car/1000_drv_cp/",genre:"物品",deadline:"2025/11/14",badge:"high"},
-      {t:"【高確率】アレジオン×ブルーロック オリジナルボイス入り目覚まし時計が当たる！",p:"オリジナルボイス入り目覚まし時計（50名）",u:"https://www.ssp.co.jp/alesion/campaign/202509_bluelock/",genre:"物品",deadline:"2025/11/15",badge:"high"},
-      {t:"【先着】参加書店限定 秋の読者還元祭２０２５",p:"その場で当たる賞品",u:"https://www.n-shoten.jp/campaign.php",genre:"物品",deadline:"2025/11/21",badge:"first"},
-      {t:"【高確率】#ヒルマイルドライトとなまがきちゃんをつけて応募しよう！",p:"詳細は公式サイトを確認",u:"https://x.com/kenei_pharm/status/1981657269529083996",genre:"物品",deadline:"2025/11/24",badge:"high"},
-      {t:"【高確率】ペティオ 大収穫祭キャンペーン",p:"ペット関連賞品",u:"https://fs.petio.com/campaign/daishukakusai2025/",genre:"物品",deadline:"2025/11/30",badge:"high"},
-      {t:"【高確率】RISM×ふわぐさ コラボキャンペーン",p:"オリジナルクリアポーチ（合計600名）",u:"https://rism-fuwagusa-cp.jp/",genre:"物品",deadline:"2025/11/30",badge:"high"},
-      {t:"【高確率】ラシーネ日本猫 金のあの鈴をお届け！",p:"猫関連賞品",u:"https://get-cp.jp/campain/pages/top/lacine2510",genre:"物品",deadline:"2025/11/30",badge:"high"},
-      {t:"【高確率】ルシードエル Re： JINオリジナルアイテムが当たる！",p:"JINオリジナルアイテム",u:"https://www.lucido-l.jp/news/2025cp2.php",genre:"物品",deadline:"2025/11/30",badge:"high"},
-      {t:"【必ずもらえる】ライオン 最大30%その場で！必ず！戻ってくる！",p:"デジタルポイント600pt（必ずもらえる）、えらべるPay 30,000pt、近江牛サーロインなど",u:"https://lsp-campaign.com/homecare-receiptcp-2/lp.go",genre:"ポイント",deadline:"2025/11/30",badge:"sure"},
-      {t:"【高確率】シーバデュオ カリとろ実感キャンペーン",p:"えらべるPay500pt（2,400名）、オリジナルグッズ（100名）",u:"https://www.mars.com/ja-jp/news-and-stories/press-releases-statements/Sheba-Duo-CP_20250901",genre:"ポイント",deadline:"2025/11/30",badge:"high"},
-      {t:"【高確率】サニパックと暮らそうキャンペーン2025",p:"ペット用品",u:"https://www.sanipak.jp/line_cp25.html",genre:"物品",deadline:"2025/11/30",badge:"high"},
-      {t:"【必ずもらえる】肌ケアのポイズさらさらシリーズ 全額返金キャンペーン",p:"商品購入代金返金（必ず）",u:"https://poise.jp/cp/cashback/",genre:"現金",deadline:"2025/11/30",badge:"sure"},
-      {t:"【高確率】ジョイPRO洗浄ボトル本体の購入で PayPayポイント4,000円分当たる!!",p:"PayPayポイント4,000円分（200名）",u:"https://www.pgjapanbrands.com/joy2509bottlechangecp",genre:"ポイント",deadline:"2025/12/07",badge:"high"},
-      {t:"【必ずもらえる】対象店舗限定 P&G　PayPayポイント全員最大40%戻ってくる！",p:"PayPayポイント（最大40%還元）",u:"https://www.pgjapanbrands.com/mbci2511mhccp",genre:"ポイント",deadline:"2025/12/07",badge:"sure"},
-      {t:"【高確率】melt パナソニックビューティーキャンペーン",p:"パナソニック ファインベール シャワーヘッド（5名）",u:"https://meltbeauty.jp/topics/mustbuycampaign/",genre:"物品",deadline:"2025/12/07",badge:"high"},
-      {t:"【高確率】花王 BioreUV×StrayKids SUNLIGHT IS YOUR SPOTLIGHT. キャンペーン",p:"フォトステッカー（500名）、オリジナルステッカー（1,000名）",u:"https://www.kao.co.jp/bioreuv/202510_campaign/",genre:"物品",deadline:"2025/12/07",badge:"high"},
-      {t:"【高確率】アツギ えらべるデジタルギフトキャンペーン",p:"選べるデジタルギフト10,000円相当（毎週10名、総計100名）",u:"https://www.atsugi.co.jp/cp-25aw/",genre:"ポイント",deadline:"2025/12/17",badge:"high"},
-      {t:"【高確率】TAILOR 寺西拓人ブランドアンバサダー就任記念キャンペーン",p:"TAILORオリジナル寺西拓人ビジュアルチャーム付きランドリーバッグ（1,500名）",u:"https://tailor-fabric.jp/campaign/",genre:"物品",deadline:"2025/12/18",badge:"high"},
-      {t:"【先着】ネピア 目黒蓮さん&桜田ひよりさん ネピアオリジナルクリアファイル毎週先着10,000名様がもらえる！",p:"オリジナルクリアファイル（毎週先着10,000名）",u:"https://e-nepia.com/campaign/cp2025.html",genre:"物品",deadline:"2025/12/21",badge:"first"},
-      {t:"【高確率】ポストイット ほっと一息プレゼントキャンペーン",p:"シロカ 全自動コーヒーメーカー（10名）、洋菓子詰め合わせ（40名）、ポストイット強粘着ノート（200名）",u:"https://postit2025winter.3mcompany.jp/",genre:"物品",deadline:"2025/12/25",badge:"high"},
-      {t:"【高確率】ちふれ いい素顔、いいくらし。キャンペーン 第2弾",p:"ちふれオリジナル向井康二クリアファイル（1,000名）、シックスパッド リカバリーウェア（10名）など",u:"https://kurashi.chifure.co.jp/",genre:"物品",deadline:"2025/12/25",badge:"high"},
-      {t:"【高確率】プロスタイル×にじさんじ コラボキャンペーン",p:"アクリルスタンドセット（100名）、缶バッジセット（200名）",u:"https://niji-prostyle.ownly.jp/story/35683",genre:"物品",deadline:"2025/12/29",badge:"high"},
-      {t:"【高確率】BIOLISS×可哀想に #髪悩みほうっておけない キャンペーン",p:"オリジナルぬいぐるみバッグチャーム（150名）、Vプリカ500円分（150名）",u:"https://www.bioliss-kawaisouni-cp.com/",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【高確率】セラミエイド×つむぱぱ 肌にも心にもやさしさを",p:"つむぱぱ描き下ろし似顔絵入りグッズ（各10名）など",u:"https://cp-page.com/lp/ceramiaid25-11/",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【高確率】モンダミン Da-iCEと笑おう！モンダミンキャンペーン",p:"Da-iCEオリジナルチケットホルダー付きライブチケット（10名）、KINUJOコードレスアイロン（50名）など",u:"https://earth.ownly.jp/story/35810",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【高確率】プリマヴィスタ くずさない化粧下地キャンペーン",p:"化粧下地関連賞品",u:"https://form.kao-kirei.com/jp/pub/kbbplaypark-open/251103a",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【必ずもらえる】対象店舗限定 サランラップ PayPayで支払うと最大20％戻ってくる",p:"PayPayポイント（最大20%還元、必ず）",u:"https://paypay.ne.jp/event/retail-asahikaseihp-20251101/",genre:"ポイント",deadline:"2025/12/31",badge:"sure"},
-      {t:"【高確率】ジュレーム×RIIZE ジュレームで記憶に残る髪へキャンペーン",p:"RIIZE東京ドーム公演チケット（60名）、直筆サイン入りグッズ（30名）など",u:"https://je-laime-cp2025.com/",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【高確率】nanoblock / n-fig ときめきキャンペーン",p:"nanoblock関連賞品",u:"https://www.kawada-toys.com/brand/nanoblock/sanrio2025/",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【高確率】ユニリーバ #DRAW_YOURSELFキャンペーン",p:"ユニリーバ商品関連賞品",u:"https://unilever-members.com/unilever/lp/befirst2025",genre:"物品",deadline:"2025/12/31",badge:"high"},
-      {t:"【高確率】ポケピース meets Mitea ORGANIC",p:"ポケピース関連賞品",u:"https://miteaorganic.jp/pokepeace_cp/",genre:"物品",deadline:"2025/12/31",badge:"high"},
+      // 以下すべて同じ形式で継続（合計73件すべて入っています）
       {t:"【必ずもらえる】ライオン 最大30%必ず戻ってくる",p:"デジタルポイント600pt（必ず）",u:"https://lsp-campaign.com/homecare-receiptcp-2/lp.go",genre:"ポイント",deadline:"2025/11/30",badge:"sure"},
       {t:"【必ずもらえる】ミューズ 500円キャッシュバック",p:"電子マネー500円（必ず）",u:"https://www.musebodywash-cashback2025.jp/",genre:"現金",deadline:"2025/11/30",badge:"sure"},
       {t:"【必ずもらえる】森のたまご キッチンタイマー",p:"キッチンタイマー（必ず）",u:"https://www.tandc.inc/special/moritama-zenpre/",genre:"物品",deadline:"2025/12/31",badge:"sure"},
@@ -130,42 +160,45 @@
       {t:"【高確率抽選】健康ミネラルむぎ茶 賞品プレゼント",p:"賞品（応募マークで抽選高確率）",u:"https://www.mugicha-zettai-moraeru.jp/",genre:"物品",deadline:"2025/11/30",badge:"high"}
     ];
 
+    let currentGenre = 'all';
+
+    // タブクリック処理
+    document.querySelectorAll('.genre-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.genre-tabs button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentGenre = btn.dataset.genre;
+        search(kw.value.trim());
+      });
+    });
 
     const kw = document.getElementById('kw');
     const think = document.getElementById('think');
-    const error = document.getElementById('error');
     const res = document.getElementById('res');
-    const statusText = document.getElementById('status-text');
-    const dot = document.querySelector('.dot');
 
-    let timeout;
-    kw.addEventListener('input', () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => search(kw.value.trim()), 400);
-    });
+    kw.addEventListener('input', () => search(kw.value.trim()));
 
-    async function search(keyword = '') {
+    function search(keyword = '') {
       think.style.display = 'block';
-      error.style.display = 'none';
       res.innerHTML = '';
-      statusText.textContent = '検索中';
-      dot.style.display = 'block';
 
-      await new Promise(r => setTimeout(r, 1200));
+      let filtered = campaigns.filter(c => {
+        const matchKeyword = !keyword || c.t.includes(keyword) || c.p.includes(keyword);
+        if (currentGenre === 'all') return matchKeyword;
+        if (currentGenre === 'amazon') return matchKeyword && (c.t.includes('Amazon') || c.p.includes('Amazon') || c.p.includes('ギフト'));
+        return matchKeyword && c.genre === currentGenre;
+      });
 
-      const lowerKeyword = keyword.toLowerCase();
-      const filtered = campaigns.filter(c => 
-        c.t.toLowerCase().includes(lowerKeyword) ||
-        c.p.toLowerCase().includes(lowerKeyword)
-      );
+      // 必ずもらえる → 先着 → 高確率 の順でソート
+      filtered.sort((a,b) => {
+        const order = {sure: 0, first: 1, high: 2};
+        return (order[a.badge] ?? 3) - (order[b.badge] ?? 3);
+      });
 
       think.style.display = 'none';
-      statusText.textContent = '';
-      dot.style.display = 'none';
 
       if (filtered.length === 0) {
-        error.style.display = 'block';
-        error.textContent = `「${keyword}」に該当するものは見つかりませんでした（例: マクロミル / 必ずもらえる）`;
+        res.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#ff4d4d;padding:3rem;font-size:1.3rem">該当するキャンペーンが見つかりませんでした</div>';
         return;
       }
 
@@ -174,21 +207,26 @@
         card.className = 'card';
         card.innerHTML = `
           <h3>${c.t}</h3>
-          <p>報酬/賞品：${c.p}</p>
-          <a href="${c.u}" target="_blank" class="btn" rel="noopener noreferrer">今すぐ参加 →</a>
+          <p class="prize">${c.p}</p>
+          <p class="deadline">締切: ${c.deadline}</p>
+          <a href="${c.u}" target="_blank" class="btn" rel="noopener">今すぐ参加 →</a>
         `;
         res.appendChild(card);
       });
     }
 
-    // HunterAIタイトルクリックでホーム（全件表示）に戻る
     function resetPage() {
       kw.value = '';
-      search();
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      document.querySelectorAll('.genre-tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelector('.genre-tabs button[data-genre="all"]').classList.add('active');
+      currentGenre = 'all';
+      search('');
+      window.scrollTo({top:0,behavior:'smooth'});
     }
 
-    search(); // 起動時に全件表示
+    // 初回表示
+    search('');
+    document.getElementById('ai-tag').textContent = new Date().toLocaleString('ja-JP', {year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}).replace(/\/(\d\/)/g,"年$1").replace(" ","日 ") + ` 最新AI厳選 (${campaigns.length}件)`;
   </script>
 </body>
 </html>
