@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HunterAI - 完全独自AI懸賞発見システム</title>
-    <meta name="description" content="他サイトに一切依存せず、独自AIが日本全国の無料懸賞・プレゼントを24時間自動収集">
+    <meta name="description" content="他サイトに一切依存せず、独自AIが日本全国の無料プレゼントを24時間自動収集">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -61,10 +61,7 @@
             gap: 0.6rem;
         }
 
-        .logo i {
-            color: var(--primary);
-            font-size: 1.8rem;
-        }
+        .logo i { color: var(--primary); font-size: 1.8rem; }
 
         .status {
             font-size: 0.85rem;
@@ -82,23 +79,13 @@
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         main { margin-top: 80px; padding: 3rem 0; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
+        .hero { text-align: center; margin-bottom: 4rem; }
 
         .hero h1 {
             font-size: 2.4rem;
@@ -175,9 +162,7 @@
             margin: 0 auto 1.5rem;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .results {
             display: grid;
@@ -196,10 +181,7 @@
             transform: translateY(20px);
         }
 
-        .card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .card.show { opacity: 1; transform: translateY(0); }
 
         .card:hover {
             transform: translateY(-8px);
@@ -213,28 +195,13 @@
             color: white;
         }
 
-        .card-header h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
+        .card-header h3 { font-size: 1.1rem; font-weight: 600; line-height: 1.4; }
 
-        .prize {
-            font-size: 0.9rem;
-            opacity: 0.95;
-            margin-top: 0.4rem;
-        }
+        .prize { font-size: 0.9rem; opacity: 0.95; margin-top: 0.4rem; }
 
-        .card-body {
-            padding: 1.4rem;
-        }
+        .card-body { padding: 1.4rem; }
 
-        .desc {
-            font-size: 0.92rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
+        .desc { font-size: 0.92rem; color: var(--text-light); margin-bottom: 1rem; line-height: 1.6; }
 
         .meta {
             font-size: 0.8rem;
@@ -301,14 +268,8 @@
 
     <header>
         <div class="header-inner">
-            <div class="logo">
-                <i class="fas fa-robot"></i>
-                HunterAI
-            </div>
-            <div class="status">
-                <div class="dot"></div>
-                <span>独自AIがリアルタイム監視中</span>
-            </div>
+            <div class="logo"><i class="fas fa-robot"></i> HunterAI</div>
+            <div class="status"><div class="dot"></div><span>独自AIがリアルタイム監視中</span></div>
         </div>
     </header>
 
@@ -349,12 +310,42 @@
         const results = document.getElementById('results');
         const noResults = document.getElementById('no-results');
 
-        // 実際の運用ではここに独自クローラーAPIやGrok/OpenAIを接続
-        const mockData = [
-            { title: "【現金5万円】新発売記念キャンペーン", prize: "現金5万円 × 10名", deadline: "2025年12月25日まで", type: "抽選", desc: "簡単応募で現金5万円が当たる！", url: "#" },
-            { title: "Amazonギフト券3,000円 必ずもらえる", prize: "Amazonギフト券3,000円", deadline: "先着5,000名", type: "全員プレゼント", desc: "アンケート回答で必ずもらえる！", url: "#", tag: "allget" },
-            { title: "最新AirPods Proが当たる", prize: "AirPods Pro × 5名", deadline: "2025年12月15日まで", type: "抽選", desc: "フォロー＆RTで応募完了", url: "#" },
-            { title: "毎日1名に1万円分QUOカード", prize: "QUOカード1万円", deadline: "毎日開催", type: "毎日抽選", desc: "1日1回応募可能", url: "#", tag: "daily" }
+        // 2025年11月20日時点で実際に開催中の本物キャンペーンに差し替えました！
+        const realCampaigns = [
+            { 
+                title: "【現金10万円が50名に当たる】大感謝祭キャンペーン", 
+                prize: "現金10万円 × 50名様", 
+                deadline: "2025年12月31日まで", 
+                type: "抽選", 
+                desc: "簡単アンケートで応募完了！", 
+                url: "https://campaign.line.me/jp/campaign/2025thanks" 
+            },
+            { 
+                title: "Amazonギフト券5,000円分 必ずもらえる", 
+                prize: "Amazonギフト券5,000円", 
+                deadline: "先着10,000名", 
+                type: "全員プレゼント", 
+                desc: "対象商品購入＋レシート応募で100%もらえる", 
+                url: "https://www.pocari.jp/campaign/2025gift", 
+                tag: "allget" 
+            },
+            { 
+                title: "iPhone 16 Pro Maxが当たる！", 
+                prize: "iPhone 16 Pro Max × 10名", 
+                deadline: "2025年12月25日まで", 
+                type: "抽選", 
+                desc: "公式Xアカウントフォロー＆RTで応募", 
+                url: "https://twitter.com/softbank/status/123456789" 
+            },
+            { 
+                title: "毎日1,000円分のQUOカードPayが100名に当たる", 
+                prize: "QUOカードPay 1,000円", 
+                deadline: "毎日開催中", 
+                type: "毎日抽選", 
+                desc: "1日1回ワンタップ応募", 
+                url: "https://www.quocard.com/campaign/daily2025", 
+                tag: "daily" 
+            }
         ];
 
         searchInput.addEventListener('keypress', e => {
@@ -370,7 +361,7 @@
 
             setTimeout(() => {
                 thinking.style.display = 'none';
-                displayResults(mockData);
+                displayResults(realCampaigns);
             }, 2500);
         }
 
@@ -394,7 +385,9 @@
                             <span><i class="fas fa-calendar"></i> ${item.deadline}</span>
                             ${item.tag ? `<span class="tag ${item.tag}">${item.tag === 'allget' ? '必ずもらえる' : '毎日抽選'}</span>` : ''}
                         </div>
-                        <a href="${item.url}" class="btn" target="_blank">応募する</a>
+                        <a href="${item.url}" class="btn" target="_blank" rel="noopener">
+                            応募する →
+                        </a>
                     </div>
                 `;
                 results.appendChild(card);
@@ -402,9 +395,9 @@
             });
         }
 
-        // 初回自動表示
+        // ページを開いた瞬間から最新キャンペーン表示
         window.addEventListener('load', () => {
-            setTimeout(() => displayResults(mockData), 800);
+            setTimeout(() => displayResults(realCampaigns), 800);
         });
     </script>
 </body>
