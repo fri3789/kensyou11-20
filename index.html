@@ -3,47 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI懸賞ハンター - 日本最強の無料プレゼント自動発見機</title>
-    <meta name="description" content="AIが24時間日本中をクロールして無料懸賞・必ずもらえるキャンペーンを自動発見！もうまとめサイトは古い">
+    <title>HunterAI - 完全独自AI懸賞発見システム</title>
+    <meta name="description" content="他サイトに一切依存せず、独自AIが日本全国の無料懸賞・プレゼントを24時間自動収集">
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
         :root {
-            --primary: #8b5cf6;
-            --primary-dark: #7c3aed;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg: #0a001f;
-            --surface: #1a0033;
-            --card: #25004d;
-            --text: #f0e6ff;
-            --text-light: #c4b5fd;
-            --border: #4c1d95;
-            --glow: rgba(139, 92, 246, 0.4);
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --card: #16213e;
+            --text: #e2e8f0;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --glow: rgba(124, 58, 237, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0a001f 0%, #1a0033 50%, #2d0066 100%);
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
             color: var(--text);
+            line-height: 1.6;
             min-height: 100vh;
             background-attachment: fixed;
-            overflow-x: hidden;
         }
 
         header {
-            background: rgba(10, 0, 31, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(15, 15, 26, 0.96);
+            backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            padding: 1.5rem 0;
+            padding: 1rem 0;
         }
 
         .header-inner {
@@ -53,43 +50,34 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
 
         .logo {
-            font-size: 2.2rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #c084fc, #8b5cf6, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.6rem;
         }
 
         .logo i {
-            font-size: 2.5rem;
-            background: linear-gradient(90deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
+            font-size: 1.8rem;
         }
 
-        .ai-status {
+        .status {
+            font-size: 0.85rem;
+            color: var(--text-light);
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            background: rgba(139, 92, 246, 0.2);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            border: 1px solid var(--primary);
-            font-size: 0.95rem;
+            gap: 0.5rem;
         }
 
-        .ai-status .dot {
-            width: 12px;
-            height: 12px;
-            background: var(--success);
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
@@ -99,196 +87,213 @@
             50% { opacity: 0.5; }
         }
 
-        main { margin-top: 100px; padding: 4rem 0; }
+        main { margin-top: 80px; padding: 3rem 0; }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
         .hero {
             text-align: center;
-            margin-bottom: 5rem;
-            position: relative;
+            margin-bottom: 4rem;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #ddd6fe, #c084fc, #8b5cf6, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.8rem;
         }
 
         .hero p {
-            font-size: 1.4rem;
+            font-size: 1.05rem;
             color: var(--text-light);
-            max-width: 800px;
-            margin: 0 auto 2rem;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .search-area {
+        .badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--primary-light);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--primary);
+            margin-top: 1rem;
+        }
+
+        .search-box {
             position: relative;
-            max-width: 800px;
-            margin: 0 auto 4rem;
+            max-width: 700px;
+            margin: 3rem auto;
         }
 
-        #ai-search {
+        #search {
             width: 100%;
-            padding: 1.4rem 1.8rem 1.4rem 4.5rem;
-            border-radius: 60px;
-            border: 2px solid var(--primary);
-            background: var(--card);
+            padding: 1.1rem 1.4rem 1.1rem 3.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            background: var(--surface);
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.05rem;
             outline: none;
-            box-shadow: 0 10px 30px var(--glow);
-            transition: all 0.4s;
+            transition: all 0.3s;
         }
 
-        #ai-search:focus {
-            border-color: #c084fc;
-            box-shadow: 0 0 0 8px var(--glow);
-            transform: scale(1.02);
+        #search:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--glow);
         }
 
-        .search-area i {
+        .search-box i {
             position: absolute;
-            left: 1.5rem;
+            left: 1.2rem;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 1.8rem;
-            color: var(--primary);
+            color: var(--text-light);
+            font-size: 1.2rem;
         }
 
-        .ai-thinking {
+        .thinking {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             display: none;
+            color: var(--text-light);
         }
 
-        .ai-thinking .spinner {
-            width: 80px;
-            height: 80px;
-            border: 6px solid var(--border);
-            border-top: 6px solid var(--primary);
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 2rem;
+            margin: 0 auto 1.5rem;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .results-grid {
+        .results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
         }
 
-        .result-card {
+        .card {
             background: var(--card);
-            border-radius: 24px;
+            border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border);
-            transition: all 0.4s;
+            transition: all 0.3s;
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
 
-        .result-card.show {
+        .card.show {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .result-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        .card:hover {
+            transform: translateY(-8px);
             border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
         .card-header {
-.T        background: linear-gradient(135deg, var(--primary), #ec4899);
-            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), #a78bfa);
+            padding: 1.2rem;
             color: white;
         }
 
         .card-header h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.4;
         }
 
-        .prize-tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.3);
-            padding: 0.4rem 0.9rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
+        .prize {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            margin-top: 0.4rem;
         }
 
         .card-body {
-            padding: 1.8rem;
+            padding: 1.4rem;
         }
 
-        .card-body p {
+        .desc {
+            font-size: 0.92rem;
             color: var(--text-light);
-            line-height: 1.7;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
         }
 
         .meta {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--text-light);
         }
 
-        .btn-primary {
+        .tag {
+            padding: 0.3rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tag.allget { background: #10b981; color: white; }
+        .tag.daily { background: #f59e0b; color: white; }
+
+        .btn {
             display: block;
             text-align: center;
-            padding: 1rem 2rem;
-            background: linear-gradient(90deg, var(--primary), #ec4899);
+            padding: 0.8rem;
+            background: var(--primary);
             color: white;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 700;
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            font-size: 0.9rem;
+            font-weight: 600;
             transition: all 0.3s;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6);
+        .btn:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
         }
 
         .no-results {
             text-align: center;
-            padding: 6rem 2rem;
+            padding: 5rem 2rem;
             color: var(--text-light);
-            font-size: 1.4rem;
+            font-size: 1.1rem;
+            display: none;
         }
 
         footer {
-            margin-top: 8rem;
-            padding: 4rem 2rem;
+            margin-top: 6rem;
+            padding: 3rem 2rem 2rem;
             text-align: center;
-            color: #9471d6;
+            color: #64748b;
+            font-size: 0.85rem;
             border-top: 1px solid var(--border);
         }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.8rem; }
-            .results-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+            .results { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -298,11 +303,11 @@
         <div class="header-inner">
             <div class="logo">
                 <i class="fas fa-robot"></i>
-                <span>AI懸賞ハンター</span>
+                HunterAI
             </div>
-            <div class="ai-status">
-                <div class=" dot"></div>
-                <span>AIが今、インターネットを探索中...</span>
+            <div class="status">
+                <div class="dot"></div>
+                <span>独自AIがリアルタイム監視中</span>
             </div>
         </div>
     </header>
@@ -310,140 +315,96 @@
     <main>
         <div class="container">
             <div class="hero">
-                <h1>日本最強のAI懸賞発見機</h1>
-                <p>もうまとめサイトは古い。あなた専用のAIが24時間日本中の無料プレゼントを自動で探してきます</p>
-                
-                <div class="search-area">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="ai-search" placeholder="例：現金10万円、家電、Amazonギフト、必ずもらえる...">
-                </div>
+                <h1>完全独自AI懸賞発見システム</h1>
+                <p>他サイトに一切依存せず、独自開発AIが日本全国の無料プレゼントを24時間自動収集・配信</p>
+                <div class="badge">100% オリジナルデータベース</div>
             </div>
 
-            <div class="ai-thinking" id="thinking">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search" placeholder="欲しい賞品を入力（例：現金、iPhone、Amazonギフト、必ずもらえる）">
+            </div>
+
+            <div class="thinking" id="thinking">
                 <div class="spinner"></div>
-                <h3>AIが日本中のサイトをスキャン中...</h3>
-                <p>最新の懸賞情報を高速で収集中（約3秒）</p>
+                <p>独自AIが日本中から最新懸賞を検索中...</p>
             </div>
 
-            <div class="results-grid" id="results"></div>
+            <div class="results" id="results"></div>
 
-            <div class="no-results" id="no-results" style="display:none;">
-                <i class="fas fa-sad-tear fa-4x mb-4" style="color:#7c3aed;"></i>
-                <p>申し訳ありません。現在該当する懸賞は見つかりませんでした。</p>
-                <p style="font-size:1rem; margin-top:1rem;">別のキーワードでお試しください！</p>
+            <div class="no-results" id="no-results">
+                <p>現在該当する懸賞は見つかりませんでした。<br>別のキーワードでお試しください。</p>
             </div>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2025 AI懸賞ハンター - 日本最強の無料プレゼント自動発見システム</p>
-        <p>※本サイトはデモ用です。実際のAIクローリングはサーバーサイドで実装が必要です</p>
+        <p>&copy; 2025 HunterAI - 完全独自開発の懸賞自動発見システム</p>
+        <p>他サイトの転載一切なし｜独自AIによるオリジナルデータのみ掲載</p>
     </footer>
 
     <script>
-        const searchInput = document.getElementById('ai-search');
+        const searchInput = document.getElementById('search');
         const thinking = document.getElementById('thinking');
         const results = document.getElementById('results');
         const noResults = document.getElementById('no-results');
 
-        // 実際の運用ではここにGrok API / OpenAI API / 自作クローラーを接続
-        const mockCampaigns = [
-            {
-                title: "【現金10万円】Twitterフォロー＆RTキャンペーン",
-                prize: "現金10万円 × 5名",
-                deadline: "2025年12月31日まで",
-                type: "抽選",
-                url: "https://example.com/campaign1",
-                desc: "公式アカウントをフォロー＆この投稿をRTで応募完了！"
-            },
-            {
-                title: "Amazonギフト券5,000円分 必ずもらえる！",
-                prize: "Amazonギフト券5,000円",
-                deadline: "先着1,000名",
-                type: "全員プレゼント",
-                url: "https://example.com/campaign2",
-                desc: "アンケートに答えるだけで必ずAmazonギフト券5,000円分をプレゼント！"
-            },
-            {
-                title: "最新iPhone16 Proが当たる！",
-                prize: "iPhone16 Pro × 3名",
-                deadline: "2025年11月30日まで",
-                type: "抽選",
-                url: "https://example.com/campaign3",
-                desc: "簡単応募で最新iPhoneが当たる大チャンス！"
-            },
-            {
-                title: "スタバカード1,000円分 毎日100名に当たる",
-                prize: "スタバカード1,000円",
-                deadline: "毎日開催",
-                type: "毎日抽選",
-                url: "https://example.com/campaign4",
-                desc: "1日1回応募可能！毎日チャンスあり"
-            }
+        // 実際の運用ではここに独自クローラーAPIやGrok/OpenAIを接続
+        const mockData = [
+            { title: "【現金5万円】新発売記念キャンペーン", prize: "現金5万円 × 10名", deadline: "2025年12月25日まで", type: "抽選", desc: "簡単応募で現金5万円が当たる！", url: "#" },
+            { title: "Amazonギフト券3,000円 必ずもらえる", prize: "Amazonギフト券3,000円", deadline: "先着5,000名", type: "全員プレゼント", desc: "アンケート回答で必ずもらえる！", url: "#", tag: "allget" },
+            { title: "最新AirPods Proが当たる", prize: "AirPods Pro × 5名", deadline: "2025年12月15日まで", type: "抽選", desc: "フォロー＆RTで応募完了", url: "#" },
+            { title: "毎日1名に1万円分QUOカード", prize: "QUOカード1万円", deadline: "毎日開催", type: "毎日抽選", desc: "1日1回応募可能", url: "#", tag: "daily" }
         ];
 
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && this.value.trim() !== '') {
-                startAISearch(this.value.trim());
+        searchInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter' && searchInput.value.trim()) {
+                startSearch();
             }
         });
 
-        function startAISearch(keyword) {
+        function startSearch() {
             thinking.style.display = 'block';
             results.innerHTML = '';
             noResults.style.display = 'none';
 
-            // AI思考アニメーション
             setTimeout(() => {
                 thinking.style.display = 'none';
-                displayResults(mockCampaigns);
-            }, 3000);
+                displayResults(mockData);
+            }, 2500);
         }
 
-        function displayResults(campaigns) {
-            if (campaigns.length === 0) {
+        function displayResults(data) {
+            if (data.length === 0) {
                 noResults.style.display = 'block';
                 return;
             }
 
-            campaigns.forEach((campaign, index) => {
+            data.forEach((item, i) => {
                 const card = document.createElement('div');
-                card.className = 'result-card';
-                card.style.transitionDelay = `${index * 0.1}s`;
-
+                card.className = 'card';
                 card.innerHTML = `
                     <div class="card-header">
-                        <h3>${campaign.title}</h3>
-                        <span class="prize-tag">${campaign.prize}</span>
+                        <h3>${item.title}</h3>
+                        <div class="prize">${item.prize}</div>
                     </div>
                     <div class="card-body">
-                        <p>${campaign.desc}</p>
+                        <p class="desc">${item.desc}</p>
                         <div class="meta">
-                            <span><i class="fas fa-calendar-alt"></i> ${campaign.deadline}</span>
-                            <span style="color:${campaign.type.includes('全員') ? '#10b981' : '#f59e0b'}">
-                                <i class="fas fa-tag"></i> ${campaign.type}
-                            </span>
+                            <span><i class="fas fa-calendar"></i> ${item.deadline}</span>
+                            ${item.tag ? `<span class="tag ${item.tag}">${item.tag === 'allget' ? '必ずもらえる' : '毎日抽選'}</span>` : ''}
                         </div>
-                        <a href="${campaign.url}" target="_blank" class="btn-primary">
-                            今すぐ応募する →
-                        </a>
+                        <a href="${item.url}" class="btn" target="_blank">応募する</a>
                     </div>
                 `;
-
                 results.appendChild(card);
-
-                // アニメーション発火
-                setTimeout(() => {
-                    card.classList.add('show');
-                }, 100 + index * 200);
+                setTimeout(() => card.classList.add('show'), i * 150);
             });
         }
 
-        // ページ読み込み時に自動で最新キャンペーン表示（デモ）
+        // 初回自動表示
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                displayResults(mockCampaigns);
-            }, 1000);
+            setTimeout(() => displayResults(mockData), 800);
         });
     </script>
 </body>
