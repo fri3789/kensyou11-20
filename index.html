@@ -61,6 +61,9 @@
     <div class="res" id="res" role="list"></div>
     <div class="pagination" id="pagination"></div>
   </main>
+  <footer style="text-align:center;padding:1rem;color:#888">
+    <p>&copy; 2025 HunterAI - Kaito Saito</p>
+  </footer>
 
   <script>
     const campaigns = [
@@ -126,6 +129,7 @@
       } finally {
         statusText.textContent = '';
         dot.style.display = 'none';
+        think.style.display = 'none'; // ここで検証中を確実に非表示
       }
     }
 
