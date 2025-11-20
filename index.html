@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HunterAI - 日本最強のAI懸賞ハンター</title>
+  <title>HunterAI - プロフェッショナルAI懸賞ハンター</title>
   <style>
-    :root { --p:#8b5cf6; --bg:#0c0a1f; --c:#221f47; --t:#f0e6ff; }
+    :root { --p:#8b5cf6; --bg:#0c0a1f; --c:#221f47; --t:#f0e6ff; --glow:rgba(139,92,246,0.3); }
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:sans-serif;background:linear-gradient(135deg,#0c0a1f,#1a1733);color:var(--t);min-height:100vh}
     header{background:rgba(12,10,31,.95);position:fixed;width:100%;top:0;padding:1rem;text-align:center;z-index:1000}
@@ -17,19 +17,25 @@
     .spin{width:60px;height:60px;border:6px solid #333;border-top:6px solid var(--p);border-radius:50%;animation:s 1s linear infinite;margin:auto}
     @keyframes s{to{transform:rotate(360deg)}}
     .res{display:grid;gap:1.5rem;max-width:1200px;margin:auto;padding:1rem}
-    .card{background:var(--c);border-radius:15px;padding:1.5rem;box-shadow:0 10px 30px rgba(139,92,246,.2);transition:.3s}
+    .card{background:var(--c);border-radius:15px;padding:1.5rem;box-shadow:0 10px 30px var(--glow);transition:.3s}
     .card:hover{transform:translateY(-10px)}
     .btn{display:block;margin-top:1rem;padding:1rem;background:var(--p);color:white;border-radius:50px;text-decoration:none;font-weight:bold}
+    .error{display:none;color:#ff4d4d;padding:1rem}
+    @media (max-width:768px){.res{grid-template-columns:1fr}.card{padding:1rem}}
   </style>
 </head>
 <body>
-  <header><h1>🚀 HunterAI - AI懸賞ハンター</h1></header>
+  <header><h1>🚀 HunterAI - プロフェッショナルAI懸賞ハンター</h1></header>
   <main>
     <div class="search">
-      <input type="text" id="kw" placeholder="現金 / Amazonギフト / 必ずもらえる / クーポン">
+      <input type="text" id="kw" placeholder="現金 / Amazonギフト / 必ずもらえる / クーポン" aria-label="検索キーワード入力">
     </div>
-    <div class="think" id="think"><div class="spin"></div><p>AIが有効なキャンペーンを検証中...</p></div>
-    <div class="res" id="res"></div>
+    <div class="think" id="think">
+      <div class="spin" aria-hidden="true"></div>
+      <p>AIが有効なキャンペーンを検証中...</p>
+    </div>
+    <div class="error" id="error">エラーが発生しました。再試行してください。</div>
+    <div class="res" id="res" role="list"></div>
   </main>
 
   <script>
@@ -42,26 +48,63 @@
       {t:"エリエール Amazonギフト山分け",p:"Amazonギフト",u:"https://www.elleair.jp/elleair-toilet/campaign/toilet-mustbuy-2511/"}
     ];
 
-    document.getElementById('kw').addEventListener('keypress', e => { if(e.key==='Enter') go(e.target.value) });
+    const kw = document.getElementById('kw');
+    const think = document.getElementById('think');
+    const error = document.getElementById('error');
+    const res = document.getElementById('res');
 
-    async function go(kw='') {
-      document.getElementById('think').style.display='block';
-      document.getElementById('res').innerHTML='';
-      await new Promise(r=>setTimeout(r,2500));
+    let timeout;
+    kw.addEventListener('input', () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => go(kw.value.trim()), 500); // リアルタイム検索（debounce）
+    });
 
-      const list = campaigns.filter(c=> kw==='' || c.t.includes(kw) || c.p.includes(kw));
-      
-      list.forEach(c=>{
-        document.getElementById('res').innerHTML += `
-          <div class="card">
+    async function go(kw = '') {
+      think.style.display = 'block';
+      error.style.display = 'none';
+      res.innerHTML = '';
+
+      try {
+        await new Promise(r => setTimeout(r, 1500)); // AI検証シミュレート
+
+        const valid = [];
+        for (const c of campaigns) {
+          try {
+            const response = await fetch(c.u, { method: 'HEAD', mode: 'no-cors' });
+            if (response.ok || response.type === 'opaque') { // 死リンクチェック
+              if (kw === '' || c.t.toLowerCase().includes(kw.toLowerCase()) || c.p.toLowerCase().includes(kw.toLowerCase())) {
+                valid.push(c);
+              }
+            }
+          } catch {}
+        }
+
+        valid.sort((a,b) => a.t.localeCompare(b.t)); // ソート機能
+
+        valid.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.role = 'listitem';
+          card.innerHTML = `
             <h3>${c.t}</h3>
             <p>賞品：${c.p}</p>
-            <a href="${c.u}" target="_blank" class="btn">今すぐ応募 →</a>
-          </div>`;
-      });
-      document.getElementBy537.getElementById('think').style.display='none';
+            <a href="${c.u}" target="_blank" class="btn" rel="noopener noreferrer" aria-label="${c.t}に応募">今すぐ応募 →</a>
+          `;
+          res.appendChild(card);
+        });
+
+        if (valid.length === 0) {
+          error.style.display = 'block';
+          error.textContent = '該当する有効キャンペーンが見つかりませんでした。';
+        }
+      } catch (e) {
+        error.style.display = 'block';
+        error.textContent = 'ネットワークエラー: ' + e.message;
+      }
+      think.style.display = 'none';
     }
-    go(); // 起動時に全件表示
+
+    go(); // 起動時実行
   </script>
 </body>
 </html>
