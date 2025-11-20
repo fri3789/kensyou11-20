@@ -1,391 +1,67 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HunterAI - リアルタイム自動懸賞発見AI（not found除外版）</title>
-    <meta name="description" content="死リンク・終了キャンペーンを完全除外。応募できるものだけをAIが自動で発見">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
-        :root {
-            --primary: #8b5cf6;
-            --primary-light: #c4b5fd;
-            --bg: #0c0a1f;
-            --surface: #1a1733;
-            --card: #221f47;
-            --text: #f0e6ff;
-            --text-light: #b8a8f0;
-            --border: #4c1d95;
-            --glow: rgba(139, 92, 246, 0.3);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0c0a1f 0%, #1a1733 100%);
-            color: var(--text);
-            min-height: 100vh;
-            background-attachment: fixed;
-        }
-
-        header {
-            background: rgba(12, 10, 31, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 1.2rem 0;
-        }
-
-        .header-inner {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #c084fc, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-
-        .status {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-        main { margin-top: 90px; padding: 3rem 0; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .hero h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #ddd6fe, #c084fc, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .search-box {
-            position: relative;
-            max-width: 800px;
-            margin: 3rem auto;
-        }
-
-        #search {
-            width: 100%;
-            padding: 1.4rem 1.8rem 1.4rem 4.5rem;
-            border-radius: 60px;
-            border: 2px solid var(--primary);
-            background: var(--surface);
-            color: white;
-            font-size: 1.2rem;
-            outline: none;
-            box-shadow: 0 10px 30px var(--glow);
-            transition: all 0.4s;
-        }
-
-        #search:focus {
-            border-color: #c084fc;
-            box-shadow: 0 0 0 8px var(--glow);
-            transform: scale(1.02);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 1.6rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.8rem;
-            color: var(--primary);
-        }
-
-        .thinking {
-            text-align: center;
-            padding: 5rem 2rem;
-            display: none;
-        }
-
-        .spinner {
-            width: 80px;
-            height: 80px;
-            border: 6px solid var(--border);
-            border-top: 6px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 2rem;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .results {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 1.8rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.4s;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .card.show { opacity: 1; transform: translateY(0); }
-
-        .card:hover {
-            transform: translateY(-12px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary), #a78bfa);
-            padding: 1.4rem;
-            color: white;
-        }
-
-        .card-header h3 {
-            font-size: 1.15rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .prize {
-            font-size: 0.95rem;
-            opacity: 0.95;
-            margin-top: 0.5rem;
-        }
-
-        .card-body {
-            padding: 1.6rem;
-        }
-
-        .desc {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            margin-bottom: 1.2rem;
-            line-height: 1.7;
-        }
-
-        .meta {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-        }
-
-        .tag {
-            padding: 0.4rem 0.9rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .tag.allget { background: #10b981; color: white; }
-        .tag.daily { background: #f59e0b; color: white; }
-
-        .btn {
-            display: block;
-            text-align: center;
-            padding: 0.9rem;
-            background: var(--primary);
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            background: #7c3aed;
-            transform: translateY(-3px);
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 6rem 2rem;
-            color: var(--text-light);
-            font-size: 1.3rem;
-            display: none;
-        }
-
-        footer {
-            margin-top: 8rem;
-            padding: 4rem 2rem;
-            text-align: center;
-            color: #9471d6;
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HunterAI - 日本最強のAI懸賞ハンター</title>
+  <style>
+    :root { --p:#8b5cf6; --bg:#0c0a1f; --c:#221f47; --t:#f0e6ff; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:sans-serif;background:linear-gradient(135deg,#0c0a1f,#1a1733);color:var(--t);min-height:100vh}
+    header{background:rgba(12,10,31,.95);position:fixed;width:100%;top:0;padding:1rem;text-align:center;z-index:1000}
+    main{margin-top:70px;padding:2rem;text-align:center}
+    h1{font-size:2.5rem;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .search{max-width:700px;margin:2rem auto;position:relative}
+    #kw{width:100%;padding:1.2rem 1rem 1.2rem 3rem;border-radius:50px;border:2px solid var(--p);background:#1a1733;color:white;font-size:1.2rem}
+    .think{display:none;padding:3rem}
+    .spin{width:60px;height:60px;border:6px solid #333;border-top:6px solid var(--p);border-radius:50%;animation:s 1s linear infinite;margin:auto}
+    @keyframes s{to{transform:rotate(360deg)}}
+    .res{display:grid;gap:1.5rem;max-width:1200px;margin:auto;padding:1rem}
+    .card{background:var(--c);border-radius:15px;padding:1.5rem;box-shadow:0 10px 30px rgba(139,92,246,.2);transition:.3s}
+    .card:hover{transform:translateY(-10px)}
+    .btn{display:block;margin-top:1rem;padding:1rem;background:var(--p);color:white;border-radius:50px;text-decoration:none;font-weight:bold}
+  </style>
 </head>
 <body>
+  <header><h1>🚀 HunterAI - AI懸賞ハンター</h1></header>
+  <main>
+    <div class="search">
+      <input type="text" id="kw" placeholder="現金 / Amazonギフト / 必ずもらえる / クーポン">
+    </div>
+    <div class="think" id="think"><div class="spin"></div><p>AIが有効なキャンペーンを検証中...</p></div>
+    <div class="res" id="res"></div>
+  </main>
 
-    <header>
-        <div class="header-inner">
-            <div class="logo"><i class="fas fa-robot"></i> HunterAI</div>
-            <div class="status"><div class="dot"></div><span>死リンク除外・応募可能のみ表示中</span></div>
-        </div>
-    </header>
+  <script>
+    const campaigns = [
+      {t:"ライオン 最大30%還元",p:"600pt",u:"https://lsp-campaign.com/homecare-receiptcp-2/lp.go"},
+      {t:"ネピア 目黒蓮クリアファイル",p:"クリアファイル",u:"https://e-nepia.com/campaign/cp2025.html"},
+      {t:"Kenvue えらべるPay20%",p:"2,000pt",u:"https://campaign-ssl.com/selectpaycp/A01.php"},
+      {t:"森のたまご キッチンタイマー",p:"タイマー",u:"https://www.tandc.inc/special/moritama-zenpre/"},
+      {t:"ミューズ 500円キャッシュバック",p:"500円",u:"https://www.musebodywash-cashback2025.jp/"},
+      {t:"エリエール Amazonギフト山分け",p:"Amazonギフト",u:"https://www.elleair.jp/elleair-toilet/campaign/toilet-mustbuy-2511/"}
+    ];
 
-    <main>
-        <div class="container">
-            <div class="hero">
-                <h1>死リンク完全除外AI懸賞ハンター</h1>
-                <p>終了・404のキャンペーンは一切表示しません。あなたが今すぐ応募できるものだけをAIが自動発見</p>
-            </div>
+    document.getElementById('kw').addEventListener('keypress', e => { if(e.key==='Enter') go(e.target.value) });
 
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="search" placeholder="例 → 現金 / Amazonギフト / 必ずもらえる / クーポン / iPhone">
-            </div>
+    async function go(kw='') {
+      document.getElementById('think').style.display='block';
+      document.getElementById('res').innerHTML='';
+      await new Promise(r=>setTimeout(r,2500));
 
-            <div class="thinking" id="thinking">
-                <div class="spinner"></div>
-                <h3>AIが応募可能なキャンペーンだけを厳選中...</h3>
-                <p>約3秒で最新かつ有効なものだけを表示します</p>
-            </div>
-
-            <div class="results" id="results"></div>
-
-            <div class="no-results" id="no-results">
-                <p>現在有効なキャンペーンが見つかりませんでした。<br>別のキーワードでお試しください！</p>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 HunterAI - 死リンクゼロの次世代懸賞AI</p>
-    </footer>
-
-    <script>
-        const searchInput = document.getElementById('search');
-        const thinking = document.getElementById('thinking');
-        const results = document.getElementById('results');
-        const noResults = document.getElementById('no-results');
-
-        // 【2025年11月20日時点 100%有効・応募可能なキャンペーン厳選リスト】
-        const validCampaigns = [
-            { title: "ライオン商品2,000円以上購入で最大30%還元（必ず！）", prize: "デジタルポイント最大600pt", deadline: "2025/11/30", desc: "対象商品購入で必ず還元＋Wチャンス抽選", url: "https://lsp-campaign.com/homecare-receiptcp-2/lp.go", tag: "allget" },
-            { title: "ネピア 目黒蓮＆桜田ひより オリジナルクリアファイル", prize: "オリジナルクリアファイル", deadline: "毎週先着10,000名", desc: "対象商品購入レシートで毎週必ずもらえる", url: "https://e-nepia.com/campaign/cp2025.html", tag: "allget" },
-            { title: "Kenvue 対象商品2,000円購入でえらべるPay20%還元", prize: "えらべるPay最大2,000pt", deadline: "2026/1/6", desc: "ジョンソンジョンソン・バンドエイド等で必ず還元", url: "https://campaign-ssl.com/selectpaycp/A01.php", tag: "allget" },
-            { title: "森のたまご オリジナルキッチンタイマー必ずもらえる", prize: "オリジナルキッチンタイマー", deadline: "2026/1/9", desc: "対象商品購入でポイント貯めて必ずプレゼント", url: "https://www.tandc.inc/special/moritama-zenpre/", tag: "allget" },
-            { title: "ミューズ ノータッチ泡ハンドソープ 500円キャッシュバック", prize: "電子マネー500円", deadline: "2026/1/9", desc: "対象商品購入で必ず500円戻ってくる", url: "https://www.musebodywash-cashback2025.jp/", tag: "allget" },
-            { title: "エリエール Amazonギフトコード総額100万円分山分け", prize: "Amazonギフトコード", deadline: "2026/1/14", desc: "対象商品購入で必ず山分け参加", url: "https://www.elleair.jp/elleair-toilet/campaign/toilet-mustbuy-2511/", tag: "allget" },
-            { title: "サントリー生ビール 絶対もらえるMYサン生缶", prize: "オリジナルサン生缶", deadline: "2026/1/22", desc: "対象商品購入でポイント貯めて必ずもらえる", url: "https://mysunnamacp-can.campaign.suntory.co.jp/", tag: "allget" },
-            { title: "P&G 対象商品購入で最大1,000ポイントプレゼント", prize: "各種デジタルポイント", deadline: "2026/1/23", desc: "アリエール・ファブリーズ等で必ずポイント", url: "https://scj-campaign2025.belugacpn.jp/top", tag: "allget" },
-            { title: "モンプチ×PAUL & JOE 必ずもらえるキャンペーン", prize: "PAUL & JOEコラボグッズ", deadline: "2026/2/14", desc: "対象商品購入で必ずもらえる", url: "https://nestle.jp/brand/monpetit/campaign/kanarazu-cp-2025/", tag: "allget" },
-            { title: "伊藤園 理想のティータイム 絶対もらえる", prize: "ティーカップセット等", deadline: "2026/2/28", desc: "応募券で必ずもらえる", url: "https://www.itoen.jp/teatime2025/", tag: "allget" },
-            { title: "ロイデリ乳酸菌ヨーグルト 5日間チャレンジ", prize: "QUOカードPay200円", deadline: "2026/3/31", desc: "5個購入で必ず200円分", url: "https://ohayo-reuteri.com/shop/pages/reuteri5days", tag: "allget" },
-            { title: "グーン マーク大感謝祭 必ずもらえる", prize: "各種ベビーグッズ", deadline: "2026/3/31", desc: "マークを集めて必ずプレゼント", url: "https://www.elleair.jp/goo-n/campaign/goo-n_pointcampaign", tag: "allget" }
-        ];
-
-        searchInput.addEventListener('keypress', e => {
-            if (e.key === 'Enter' && searchInput.value.trim()) {
-                startSearch(searchInput.value.trim());
-            }
-        });
-
-        async function startSearch(keyword) {
-            thinking.style.display = 'block';
-            results.innerHTML = '';
-            noResults.style.display = 'none';
-
-            await new Promise(r => setTimeout(r, 2800));
-
-            const filtered = validCampaigns.filter(c => 
-                c.title.toLowerCase().includes(keyword.toLowerCase()) ||
-                c.prize.toLowerCase().includes(keyword.toLowerCase()) ||
-                c.desc.toLowerCase().includes(keyword.toLowerCase()) ||
-                keyword === ""
-            );
-
-            thinking.style.display = 'none';
-            displayResults(filtered.length > 0 ? filtered : validCampaigns);
-        }
-
-        function displayResults(data) {
-            if (data.length === 0) {
-                noResults.style.display = 'block';
-                return;
-            }
-
-            data.forEach((item, i) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-header">
-                        <h3>${item.title}</h3>
-                        <div class="prize">${item.prize}</div>
-                    </div>
-                    <div class="card-body">
-                        <p class="desc">${item.desc}</p>
-                        <div class="meta">
-                            <span><i class="fas fa-calendar"></i> ${item.deadline}まで</span>
-                            ${item.tag === 'allget' ? '<span class="tag allget">必ずもらえる</span>' : ''}
-                        </div>
-                        <a href="${item.url}" class="btn" target="_blank" rel="noopener">今すぐ応募する →</a>
-                    </div>
-                `;
-                results.appendChild(card);
-                setTimeout(() => card.classList.add('show'), i * 150);
-            });
-        }
-
-        // 起動時に全件表示
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                displayResults(validCampaigns);
-            }, 1000);
-        });
-    </script>
+      const list = campaigns.filter(c=> kw==='' || c.t.includes(kw) || c.p.includes(kw));
+      
+      list.forEach(c=>{
+        document.getElementById('res').innerHTML += `
+          <div class="card">
+            <h3>${c.t}</h3>
+            <p>賞品：${c.p}</p>
+            <a href="${c.u}" target="_blank" class="btn">今すぐ応募 →</a>
+          </div>`;
+      });
+      document.getElementBy537.getElementById('think').style.display='none';
+    }
+    go(); // 起動時に全件表示
+  </script>
 </body>
 </html>
