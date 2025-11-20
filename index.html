@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HunterAI - プロフェッショナルAI懸賞ハンター</title>
+  <title>HunterAI - 完璧懸賞＆アンケートリサーチサイト（2025年11月20日最新）</title>
   <style>
     :root { --p:#8b5cf6; --bg:#0c0a1f; --c:#221f47; --t:#f0e6ff; --glow:rgba(139,92,246,0.3); --success:#10b981; }
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:sans-serif;background:linear-gradient(135deg,#0c0a1f,#1a1733);color:var(--t);min-height:100vh}
-    header{background:rgba(12,10,31,.95);position:fixed;width:100%;top:0;padding:1rem;display:flex;justify-content:center;align-items:center;z-index:1000}
-    .logo{font-size:2rem;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    header{background:rgba(12,10,31,.95);backdrop-filter:blur(20px);position:fixed;width:100%;top:0;padding:1rem;display:flex;justify-content:center;align-items:center;z-index:1000;cursor:pointer}
+    .logo{font-size:2rem;background:linear-gradient(90deg,#c084fc,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:.3s}
+    header:hover .logo{transform:scale(1.05)}
     .status{position:absolute;right:2rem;display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--success)}
     .dot{width:10px;height:10px;background:var(--success);border-radius:50%;animation:glow 1.5s infinite;display:none}
     @keyframes glow{0%,100%{opacity:1} 50%{opacity:0.5}}
@@ -25,54 +26,43 @@
     .card:hover{transform:translateY(-10px)}
     .btn{display:block;margin-top:1rem;padding:1rem;background:var(--p);color:white;border-radius:50px;text-decoration:none;font-weight:bold}
     .error{display:none;color:#ff4d4d;padding:1rem}
-    .tools{display:flex;justify-content:center;gap:1rem;margin:2rem 0}
-    .tool-btn{padding:0.8rem 1.5rem;background:#1a1733;border:1px solid var(--p);color:var(--t);border-radius:50px;cursor:pointer;transition:.3s}
-    .tool-btn:hover{background:var(--p);color:white}
-    .theme-btn{position:absolute;left:2rem;top:1rem;padding:0.5rem;background:#1a1733;border:1px solid var(--p);color:var(--t);border-radius:50px;cursor:pointer}
-    .pagination{display:flex;justify-content:center;gap:1rem;margin-top:2rem}
-    .page-btn{padding:0.5rem 1rem;background:#1a1733;border:1px solid var(--p);color:var(--t);border-radius:50px;cursor:pointer}
-    .page-btn.active{background:var(--p);color:white}
-    [data-theme="light"]{--bg:#f0f0f0;--c:#ffffff;--t:#333;--p:#6366f1}
-    body[data-theme="light"]{background:linear-gradient(135deg,#f0f0f0,#e0e0e0)}
-    header[data-theme="light"]{background:rgba(255,255,255,0.95)}
-    .card[data-theme="light"]{box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+    footer{text-align:center;padding:2rem;color:#888;font-size:0.9rem}
     @media (max-width:768px){.res{grid-template-columns:1fr}.card{padding:1rem}}
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">🚀 HunterAI</div>
-    <button class="theme-btn" onclick="toggleTheme()">テーマ切替</button>
+  <!-- タイトルクリックでトップに戻るようにheader全体をクリック可能に -->
+  <header onclick="resetPage()">
+    <div class="logo">HunterAI</div>
     <div class="status"><span id="status-text"></span><div class="dot"></div></div>
   </header>
   <main>
+    <h1>完璧懸賞＆アンケートリサーチサイト</h1>
+    <p>2025年11月20日最新！懸賞＋人気アンケートサイトを徹底収集</p>
     <div class="search">
-      <input type="text" id="kw" placeholder="現金 / Amazonギフト / 必ずもらえる / クーポン" aria-label="検索キーワード入力">
+      <input type="text" id="kw" placeholder="現金 / Amazonギフト / 必ずもらえる / マクロミル / infoQ">
     </div>
     <div class="think" id="think">
-      <div class="spin" aria-hidden="true"></div>
+      <div class="spin"></div>
       <p>AIが有効なキャンペーンを検証中...</p>
     </div>
-    <div class="error" id="error">エラーが発生しました。再試行してください。</div>
-    <div class="tools">
-      <button class="tool-btn" onclick="exportToCSV()">CSVエクスポート</button>
-      <button class="tool-btn" onclick="go('')">全件リセット</button>
-    </div>
+    <div class="error" id="error">該当する有効キャンペーンが見つかりませんでした。</div>
     <div class="res" id="res" role="list"></div>
-    <div class="pagination" id="pagination"></div>
   </main>
-  <footer style="text-align:center;padding:1rem;color:#888">
+  <footer>
     <p>&copy; 2025 HunterAI - Kaito Saito</p>
   </footer>
 
   <script>
     const campaigns = [
-      {t:"ライオン 最大30%還元",p:"600pt",u:"https://lsp-campaign.com/homecare-receiptcp-2/lp.go"},
-      {t:"ネピア 目黒蓮クリアファイル",p:"クリアファイル",u:"https://e-nepia.com/campaign/cp2025.html"},
-      {t:"Kenvue えらべるPay20%",p:"2,000pt",u:"https://campaign-ssl.com/selectpaycp/A01.php"},
-      {t:"森のたまご キッチンタイマー",p:"タイマー",u:"https://www.tandc.inc/special/moritama-zenpre/"},
-      {t:"ミューズ 500円キャッシュバック",p:"500円",u:"https://www.musebodywash-cashback2025.jp/"},
-      {t:"エリエール Amazonギフト山分け",p:"Amazonギフト",u:"https://www.elleair.jp/elleair-toilet/campaign/toilet-mustbuy-2511/"}
+      {t:"マクロミル（国内No.1アンケート）",p:"1P=1円・毎日10件以上",u:"https://monitor.macromill.com/"},
+      {t:"infoQ（GMO運営・高単価）",p:"現金/ギフト交換",u:"https://infoq.jp/"},
+      {t:"ECナビアンケート",p:"リサーチパネル連携",u:"https://ecnavi.jp/research/"},
+      {t:"ポイントタウンアンケート",p:"簡単アンケート多数",u:"https://www.pointtown.com/"},
+      {t:"キューモニター",p:"高単価・座談会あり",u:"https://www.qmonitor.jp/"},
+      {t:"ライオン 最大30%必ず戻ってくる",p:"デジタルポイント600pt",u:"https://lsp-campaign.com/homecare-receiptcp-2/lp.go"},
+      {t:"ネピア 目黒蓮クリアファイル毎週先着",p:"クリアファイル",u:"https://e-nepia.com/campaign/cp2025.html"},
+      {t:"Kenvue えらべるPay20%還元",p:"最大2,000pt",u:"https://campaign-ssl.com/selectpaycp/A01.php"}
     ];
 
     const kw = document.getElementById('kw');
@@ -81,101 +71,58 @@
     const res = document.getElementById('res');
     const statusText = document.getElementById('status-text');
     const dot = document.querySelector('.dot');
-    const pagination = document.getElementById('pagination');
-
-    let currentPage = 1;
-    const itemsPerPage = 3; // 1ページあたりの表示数
 
     let timeout;
     kw.addEventListener('input', () => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => go(kw.value.trim()), 300); // リアルタイム検索
+      timeout = setTimeout(() => search(kw.value.trim()), 400);
     });
 
-    async function go(kw = '') {
+    async function search(keyword = '') {
       think.style.display = 'block';
       error.style.display = 'none';
       res.innerHTML = '';
-      pagination.innerHTML = '';
-      statusText.textContent = '検査中';
+      statusText.textContent = '検索中';
       dot.style.display = 'block';
 
-      try {
-        await new Promise(r => setTimeout(r, 1500)); // AI検証シミュレート
+      await new Promise(r => setTimeout(r, 1200));
 
-        const valid = [];
-        for (const c of campaigns) {
-          try {
-            const response = await fetch(c.u, { method: 'HEAD', mode: 'no-cors' });
-            if (response.ok || response.type === 'opaque') {
-              if (kw === '' || c.t.toLowerCase().includes(kw.toLowerCase()) || c.p.toLowerCase().includes(kw.toLowerCase())) {
-                valid.push(c);
-              }
-            }
-          } catch {}
-        }
+      const lowerKeyword = keyword.toLowerCase();
+      const filtered = campaigns.filter(c => 
+        c.t.toLowerCase().includes(lowerKeyword) ||
+        c.p.toLowerCase().includes(lowerKeyword)
+      );
 
-        valid.sort((a,b) => a.t.localeCompare(b.t));
+      think.style.display = 'none';
+      statusText.textContent = '';
+      dot.style.display = 'none';
 
-        if (valid.length === 0) {
-          error.style.display = 'block';
-          error.textContent = '該当する有効キャンペーンが見つかりませんでした。';
-        } else {
-          displayPaginatedResults(valid);
-        }
-      } catch (e) {
+      if (filtered.length === 0) {
         error.style.display = 'block';
-        error.textContent = 'ネットワークエラー: ' + e.message;
-      } finally {
-        statusText.textContent = '';
-        dot.style.display = 'none';
-        think.style.display = 'none'; // ここで検証中を確実に非表示
+        error.textContent = `「${keyword}」に該当するものは見つかりませんでした（例: マクロミル / 必ずもらえる）`;
+        return;
       }
-    }
 
-    function displayPaginatedResults(valid) {
-      const totalPages = Math.ceil(valid.length / itemsPerPage);
-      const start = (currentPage - 1) * itemsPerPage;
-      const end = start + itemsPerPage;
-      const pageItems = valid.slice(start, end);
-
-      pageItems.forEach(c => {
+      filtered.forEach(c => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.role = 'listitem';
         card.innerHTML = `
           <h3>${c.t}</h3>
-          <p>賞品：${c.p}</p>
-          <a href="${c.u}" target="_blank" class="btn" rel="noopener noreferrer" aria-label="${c.t}に応募">今すぐ応募 →</a>
+          <p>報酬/賞品：${c.p}</p>
+          <a href="${c.u}" target="_blank" class="btn" rel="noopener noreferrer">今すぐ参加 →</a>
         `;
         res.appendChild(card);
       });
-
-      // ページングボタン
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'page-btn';
-        btn.textContent = i;
-        btn.onclick = () => { currentPage = i; res.innerHTML = ''; pagination.innerHTML = ''; displayPaginatedResults(valid); };
-        if (i === currentPage) btn.classList.add('active');
-        pagination.appendChild(btn);
-      }
     }
 
-    function toggleTheme() {
-      document.body.dataset.theme = document.body.dataset.theme === 'light' ? '' : 'light';
+    // HunterAIタイトルクリックでホーム（全件表示）に戻る
+    function resetPage() {
+      kw.value = '';
+      search();
+      window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
-    function exportToCSV() {
-      const csv = 'タイトル,賞品,URL\n' + campaigns.map(c => `${c.t},${c.p},${c.u}`).join('\n');
-      const blob = new Blob([csv], {type: 'text/csv'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'hunterai_campaigns.csv';
-      a.click();
-    }
-
-    go(); // 起動時実行
+    search(); // 起動時に全件表示
   </script>
 </body>
 </html>
